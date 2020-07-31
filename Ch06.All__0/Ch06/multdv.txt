@@ -1,0 +1,16 @@
+     names read dance tv ski
+1    belly    7    10  6   5
+2    belly    8     9  5   7
+3    belly    5    10  5   8
+4    belly    6    10  6   8
+5    belly    7     8  7   9
+6  politic    4     4  4   4
+7  politic    6     4  5   3
+8  politic    5     5  5   6
+9  politic    6     6  6   7
+10 politic    4     5  6   5
+11   Admin    3     1  1   2
+12   Admin    5     3  1   5
+13   Admin    4     2  2   5
+14   Admin    7     1  2   4
+15   Admin    6     3  3   3

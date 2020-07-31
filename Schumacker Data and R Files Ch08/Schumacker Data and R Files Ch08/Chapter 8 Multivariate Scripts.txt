@@ -1,0 +1,64 @@
+help.search("LifeCycleSavings")
+?LifeCycleSavings
+
+help("cancor")
+
+data("LifeCycleSavings")
+head(LifeCycleSavings,10)
+
+
+pop = LifeCycleSavings[, 2:3]
+oec = LifeCycleSavings[, -(2:3)]
+cancor(pop, oec)
+
+help.search("CCA")
+install.packages("CCA")
+library(CCA)
+
+matcor(pop,oec)
+
+res.cc=cc(pop,oec)
+
+plt.cc(res.cc,type="i")
+
+install.packages("yacca")
+library(yacca)
+
+options(scipen=999)
+cca.fit = cca(pop,oec)
+F.test.cca(cca.fit)
+
+install.packages("CCA")
+library(CCA)
+
+mm = read.csv("https://stats.idre.ucla.edu/stat/data/mmreg.csv")
+
+colnames(mm) = c("Control", "Concept", "Motivation", "Read", "Write", "Math", "Science, "Sex")
+head(mm,10)
+
+psych = mm[, 1:3]
+acad = mm[, 4:7]
+
+matcor(psych, acad)
+
+ccl = cc(psych, acad)
+ccl
+
+plt.cc(ccl,type="v",var.label=TRUE)
+
+CC2 = comput(psych, acad, ccl)
+
+install.packages("yacca")
+library(yacca)
+
+options(scipen=999)
+cca2.fit = cca(psych,acad)
+F.test.cca(cca2.fit)
+
+psychsd = diag(sqrt(diag(cov(psych))))
+Xout = matrix(psychsd%*%ccl$xcoef,nrow=3,ncol=3,byrow=FALSE,dimnames = list(c("control","concept","motivation"),c("CV1","CV2","CV3")))
+Xout
+
+acadsd = diag(sqrt(diag(cov(acad))))
+Yout = matrix(acadsd%*%ccl$ycoef,nrow=4,ncol=3,byrow=FALSE,dimnames = list(c("read","write","math","science"),c("CV1","CV2","CV3")))
+Yout

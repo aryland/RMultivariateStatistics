@@ -1,0 +1,104 @@
+S = matrix(c(44.23,22.42,31.23,32.54,19.22,22.42,55.13, 22.55, 25.56,23.15,31.23,22.55,61.21,29.42,27.35,32.54,25.56,29.42,57.42,33.34,19.22,23.15,27.35,33.34,72.36), nrow=5, ncol=5,byrow=FALSE)
+S
+
+R = cov2cor(S)
+R
+
+corr.p(cor(pca),161,alpha=.05,adjust="none")
+
+det(S)
+det(R)
+
+eigen(S)
+
+out = (eigen(S))
+
+V = (out$vectors)
+tV = t(out$vectors)
+
+I = V %*% tV
+round(I,2)
+
+eigen(R)
+
+options(scipen=999)
+R = cov2cor(S)
+
+R
+out2 = (eigen(R))
+V = (out2$vectors)
+tV = t(out2$vectors)
+E = tV%*%R%*%V
+E = rbind(E[1,1],E)
+E
+
+out2 = (eigen(R))
+E = (out2$vectors)
+tE = t(out2$vectors)
+
+I2 = E %*% tE
+
+round(I,2)
+
+
+install.packages("psych")
+install.packages("rela")
+install.packages("MASS")
+install.packages("parallel")
+library(psych); library(rela); library(MASS); library(parallel)
+options(scipen=999)
+
+setwd("C:/") #place files on desktop given issues accessing with GooglDrive
+
+file.choose("ch7ex1.dat")
+pca = read.delim(file = "C:Desktop\Ch10\ch7ex1.dat",header=TRUE, sep="\t")
+colnames(pca) = c("IRLETT", "FIGREL", "IRSYMB", "CULTFR", "RAVEN")
+head(pca,10)
+tail(pca,10)
+
+pcacor = cor(pca)
+pcacor
+
+pcacov = cov(pca)
+pcacov 
+
+convert = cov2cor(pcacov)
+convert
+
+libray("psych")
+out = corr.p(cor(pca),161,alpha=.05)
+print(out)
+
+paf.pca = paf(pca,eigcrit=1,convcrit=.001)
+summary(paf.pca)
+
+cortest.bartlett(pcacor, n = 161)
+
+det(pcacor)
+
+pcmodell = principal(pcacor,rotate="none")
+pcmodell
+
+pcmodel2 = principal(pcacor,nfactors=5,rotate="none") 
+
+alpha(pcacor)
+
+fa.parallel(pca, n.obs=161, fm="pa", fa="pc")
+
+fa.diagram(pcmodel2)
+
+pca2 = data.frame(pca)
+attach(pca2)
+
+pcscores = .87*IRLETT +.86*FIGREL +.92*IRSYMB +.88*CULTFR +.81*RAVEN
+
+pcscores = sort(pcscores, decreasing = FALSE)
+pcscores
+
+pcscaled = 16.742 + (.25285 * pcscores)
+
+round(pcscaled,2)
+
+par(mfrow=c(1,2))
+hist(pcscores)
+hist(pcscaled)

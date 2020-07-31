@@ -1,0 +1,331 @@
+data(iris)
+head(iris)
+
+install.packages("MVN")
+library(MVN)
+
+Iris = iris[1:50,1:4]
+head(Iris)
+
+result = mardiaTest(Iris), cov=TRUE, qqplot=FALSE)
+result
+
+install.packages("mvnormtest")
+library(mvnormtest)
+
+result = t(Iris)
+mshapiro.test(result)
+
+Iris2 = iris[51:100,1:4]
+
+result2 = t(Iris2)
+mshapiro.test(result2)
+
+data(iris)
+Iris = iris[1:50,1:4]
+Iriscov = cov(Iris)
+library(psych)
+cortest.bartlett(Iriscov, n = 50)
+
+det(Iriscov)
+eigen(Iriscov)
+
+Iriscor = cor(Iris)
+library(mvnormtest)
+out = t(Iriscor)
+mshapiro.test(out)
+
+install.packages("biotools")
+library(biotools)
+
+attach(iris)
+factor(Species)
+Four = iris[,-5]
+options(scipen=999)
+boxM(Four, Species)
+
+Iriscor = cor(Iris)
+Iriscor
+
+Iriscov = cov(Iris)
+Iriscov
+
+cov2cor (Iriscov)
+
+sd(Iris$Sepal.Length)
+sd(Iris$Sepal.Width)
+sd(Iris$Petal.Length)
+sd(Iris$Petal.Width)
+
+install.packages("lavaan")
+library(lavaan)
+cor2cov (Iriscor,c(.3524897,.3790644,.173644,.1053856))
+
+install.packages("lavaan")
+library(lavaan)
+fullcor = lav_matrix_lower2full(c(1.0,.7425467,1.0,.2671758,.1777,1.0,.2780984,.2327520,.3316300,1.0))
+fullcor
+
+library(psych)
+A = lav_matrix_lower2full(c(1.0,.75,1.0,.82,.65,1.0))
+B = lav_matrix_lower2full(c(1.0,.70,1.0,.80,.60,1.0))
+A
+B
+
+cortest.mat (A,B,n1=100,n2=100)
+
+?cortest.mat
+
+install.packages("corpcor")
+library(corpcor)
+
+pcor1 = cor2pcor (Iriscor)
+pcor1
+
+pcor2 = cor2pcor (Iriscov)
+pcor2
+
+pcor2cor(pcorl)
+pcor2cor(pcor2)
+
+
+help.search("normality")
+help(package = psych)
+help.start()
+
+# http://www.rseek.org
+
+install.packages("ctv")
+library("ctv")
+
+install.views("Psychometrics")
+update.views("Psychometrics")
+
+help (package = "sem")
+
+library(sem)
+HScov
+
+cfamodel = cfa()
+FA: Visperc, Cubes, Lozenges
+FB: Parcomp, Sencomp, Wordmean
+FA~~FB
+
+model = sem(cfamodel, HScov, 301)
+
+help(package=psych)
+
+
+cfa.model = '
+   1v1 =~ Visperc + Cubes + Lozenges
+   1v2 =~ Parcomp + Sencomp + Wordmean
+   1v1~~1v2 '
+
+cfa.fit = cfa(model = cfa.model, sample.cov = fullcov, sample.nobs = 301)
+summary (cfa.fit)
+
+help(package=lavaan)
+
+
+#CFA Basic Model
+
+library(lavaan)
+
+fullcov = data.frame(lav_matrix_lower2full(c(49.064,9.810,22.182,27.928,14.482,81.863,9.117,2.515,5.013,12.196,10.610,3.389,3.605,13.217,26.645,19.166,6.954,13.716,18.868,28.502,58.817),diagonal=TRUE),rownames= c("Visperc","Cubes","Lozenges","Parcomp","Sencomp","Wordmean"))
+names(fullcov) = c("Visperc","Cubes","Lozenges","Parcomp","Sencomp","Wordmean")
+fullcov
+
+fullcov = as.matrix(fullcov)
+
+cfa.model = '
+    spatial =~ Visperc + Cubes + Lozenges 
+    verbal=~ Parcomp + Sencomp + Wordmean' 
+  spatial~~verbal
+
+cfa.fit = cfa(model= cfa.model, sample.cov = fullcov, sample.nobs = 301, std.lv=FALSE)
+
+summary (cfa.fit, standardized = FALSE)
+
+modindices(cfa.fit)
+
+mcfa2.model = '
+    spatial =~Visperc + Cubes + Lozenges
+    verbal =~ Parcomp + Sencomp + Wordmean
+    spatial~~verbal
+    Cubes~~Lozenges'
+
+mcfa.fit = cfa(mcfa2.model,sample.cov=fullcov,sample.nobs=301,std. 1v=TRUE)
+Summary(mcfa.fit)
+
+modindices(mcfa.fit)
+
+fcfa2.model = '
+     spatial =~Visperc + Cubes + Lozenges
+     verbal =~ Parcomp + Sencomp +n Wordmean
+     spatial~~verbal'
+Cubes~~Lozenges
+Parcomp~~Lozenges
+Parcomp~~Wordmean
+
+fcfa.fit = cfa(fcfa2.model,sample.cov=fullcov,sample.nobs=301,std.lv=TRUE)
+summary(fcfa.fit)
+
+library(psych)
+
+lavaan.diagram(fcfa.fit, title = "CFA Bi=Factor Confirmatory Model")
+
+#Multiple Group Model
+
+library(lavaan)
+
+girls = lav_matrix_lower2full(c(112.35,77.22,103.42,69.33,74.44,109.16,21.22,23.46,29.51,11.32,20.35,28.23,31.43,78.54,104.49,21.53,34.33,29.23,72.75,87.97,114.62))
+
+boys = lav_matrix_lower2full(c(113.38,78.23,105.49,69.92,74.43,108.15,22.25,22.45,29.71,112.38,21.32,27.26,31.63,78.65,105.49,22.53,33.37,29.43,72.95,88.43,113.60))
+
+girls = data.frame(girls,row.names=c("RA1","RA2","RA3","MA1","MA2","MA3"))
+names(girls) = c("RA1","RA2","RA3","MA1","MA2","MA3")
+girls = as.matrix(girls)
+
+girls
+
+boys = data.frame(boys,row.names=c("RA1","RA2","RA3","MA1","MA2","MA3"))
+names(boys) = c("RA1","RA2","RA3","MA1","MA2","MA3")
+boys = as.matrix(boys)
+boys
+
+cfa.model = '
+read =~ RA1 + RA2 + RA3
+math =~ MA1 + MA2 + MA3
+read~~math '
+
+fit.index = c("chisq","df","pvalue","cfi","rmsea","gfi")
+
+girl.fit = cfa(cfa2.model,sample.cov = girls,sample.nobs=230,std.lv=FALSE)
+fitMeasures(girl.fit, fit.index)
+
+summary(girl.fit, standardized = TRUE)
+
+boy.fit = cfa(cfa2.model,sample.cov = boys,sample.nobs=215, std.lv=FALSE)
+fitMeasures(boy.fit,fit.index)
+
+summary(boy.fit, standardized = TRUE)
+
+anova(boy.fit,girl.fit)
+
+#Diagrams
+
+libary(psych)
+par(mfrcol=c(1,2),pty="m",cex=.7)
+
+lavaan.diagram(girl.fit, title="Girls BiFactor CFA")
+lavaan.diagram(boy.fit)
+
+library(psych)
+par(mfrcol=c(1,2),pty="m",cex=.7)
+
+lavaan.diagram(girl.fit, title="Girls Bi-Facotr CFA")
+lavaan.diagram(boy.fit, title="Boys Bi-Factor CFA")
+
+#Basic SEM Model
+
+library(lavaan)
+ski = data.frame(lower2full(c(1,.7,11.47,.62,.62,1.87,.44,.44,.95,1.17,.3,.21,.54,.38,1),diagonal=TRUE),row.names=c("NUMYRS","DAYSKI","SNOWSAT","FOODSAT","SENSEEK"))
+names(ski) = c("NUMYRS","DAYSKI","SNOWSAT","FOODSAT","SENSEEK")
+ski = as.matrix(ski)
+ski
+
+basic.model = '
+loveski =~ NUMYRS + DAYSKI
+skisat =~ SNOWSAT + FOODSAT
+skisat ~ SENSEEK +loveski'
+
+fit.index = c("chisq","df","pvalue","cfi","rmsea","gfi")
+basic.fit = sem(model=basic.model,sample.cov = ski, sample.nobs = 100,std.lv=TRUE)
+fitMeasures(basic.fit,fit.index)
+
+summary(basic.fit,standardized=TRUE)
+
+fx = matrix(c(.81,.86),ncol=1)
+fy = matrix(c(1.1,.78),ncol=1)
+Phi = matrix(c(1,0,.56,0,1,0),ncol=2,byrow=TRUE)
+f1= structure.diagram(fx,Phi,fy)
+f1
+
+library(lavaan)
+
+basicgrowth = data.frame(lower2full(c(1,.161,1,.408,.348,1,.373,.269,.411,1,.254,.143,.276,.705,1),diagonal=TRUE), row.names = c("Age11","Age12","Age13","Age14","Age15"))
+names(basicgrowth) = c("Age11","Age12","Age13","Age14","Age15")
+basicgrowth = as.matrix(basicgrowth)
+basicgrowth
+
+basicgrowth.mn = c(.201, .226, .326, .417, .446)
+basicgrowth.mn
+
+basic.modell = '
+i =~ 1*Age11 + 1*Age12 + 1*Age13 + 1*Age14 + 1*Age15
+s =~ 0*Age11 + 1*Age12 + 1*Age13 + 1*Age14 + 1*Age15'
+
+basic.fit1 = growth(basic.modell, sample.cov=basicgrowth, sample.nobs=168, sample.mean = basicgrowth.mn)
+summary(basic.fit1,standardized=TRUE)
+lavaan.diagram
+
+basic.model2 = '
+i =~ 1*Age11 + 1*Age12 + 1*Age13 + 1*Age14 + 1*Age15
+s =~ 0*Age11 + 1*Age12 + 1*Age13 + 1*Age14 + 1*Age15
+
+Age11 ~~ r*Age11
+Age12 ~~ r*Age12
+Age13 ~~ r*Age13
+Age14 ~~ r*Age14
+Age15 ~~ r*Age15'
+
+basic.model3 = '
+i =~ 1*Age11 + 1*Age12 + 1*Age13 + 1*Age14 + 1*Age15
+s =~ 0*Age11 + 1*Age12 + 1*Age13 + 1*Age14 + 1*Age15
+Age11 ~~ Age12
+Age14 ~~ Age15'
+
+basic.fit3 = growth(basic.model3,sample.cov=basicgrowth,sample.nobs=168,sample.mean = basicgrowth.mn)
+summary(basic.fit3,standardized=TRUE)
+
+inspect(basic.fit3,"user")
+fitted.values(basic.fit3)
+coef(basic.fit3)
+parameterEstimates(basic.fit3)
+
+library(lavaan)
+
+mns = c(20.602,21.688,22.730,23.760,98.795,99.240,50.002,49.940,50.040,49.943)
+mns
+
+
+advgrowth = data.frame(lower2full(c(
+  2.481,
+  2.510,4.466,
+  3.113,4.966,7.371,
+  3.488,5.722,7.933,10.318,
+  12.482,19.497,25.238,30.622,405.091,
+  6.379,9.411,11.363,14.389,179.383,245.697,
+  0.151,0.011,0.118,0.036,-1.045,0.308,0.945,
+  -0.014,0.335,0.049,0.018,0.594,0.115,0.083,1.114,
+  -0.012,0.100,0.412,0.075,-0.318,0.226,-0.013,0.078,0.926,
+  -0.015,-0.163,-0.221,-0.051,-0.420,0.493,0.028,0.032,0.057,1.002),diagonal=TRUE),row.names =c("COLLASP1","COLLASP2","COLLASP3","COLLASP4","PARSTYL1","PARSTYL2","MOTIVN1","MOTIVN2","MOTIVN3","MOTIVN4") )
+names (advgrowth) =c("COLLASP1","COLLASP2","COLLASP3","COLLASP4","PARSTYL1","PARSTYL2","MOTIVN1","MOTIVN2","MOTIVN3","MOTIVN4")
+advgrowth = as.matrix(advgrowth)
+advgrowth
+
+
+
+advgrowth.model = '
+    i =~ 1*COLLASP1 + 1*COLLASP2 + 1*COLLASP3 + 1*COLLASP4
+    s =~ 0*COLLASP1 + 1*COLLASP2 + 2*COLLASP3 + 3*COLLASP4
+    i + s ~  PARSTYL1    
+ 
+    COLLASP1 ~ MOTIVN1
+    COLLASP2 ~ MOTIVN2
+    COLLASP3 ~ MOTIVN3
+    COLLASP4 ~ MOTIVN4'   
+
+advgrowth.fit = growth(advgrowth.model, sample.cov=advgrowth, sample.nobs=400, sample.mean = mns)
+summary(advgrowth.fit, standardized=TRUE)
+
